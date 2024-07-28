@@ -20,6 +20,18 @@ pip install --upgrade pip
 
 pip install -r requirements.txt
 
+#configuração - alterar o arquivo s3.env, pegar o aws access key, secret,session token na aba iAWS Details de https://awsacademy.instructure.com/courses/84696/modules/items/7696432 
+
+--s3.env--
+AWS_ACCESS_KEY_ID=ALtera a key 
+
+AWS_SECRET_ACCESS_KEY=altera o secret 
+
+AWS_DEFAULT_REGION=us-east-1
+
+AWS_SESSION_TOKEN=Altera o session token
+
+
 #para execução
 
 python b3_web_scrapping.py
