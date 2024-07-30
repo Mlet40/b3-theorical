@@ -55,10 +55,12 @@ def scrape_header():
             if th.get_attribute("colspan") == "2":
                 continue  # Ignorar a coluna
             header_data.append(th.text)
+        header_data.append("data")
         print('--------------HEADER ---------------------')
         print(header_data)
 def scrape_page():
     try:
+        datatheo = get_teoric_date()
         # Aguarde até que os dados da tabela sejam carregados
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located(
@@ -69,7 +71,8 @@ def scrape_page():
         rows = driver.find_elements(By.XPATH,
                                     "//table/tbody/tr")
         for row in rows:
-            row_data = [cell.text for cell in row.find_elements(By.XPATH, "td")]
+            row_data = [cell.text.replace(".","").replace(",",".") for cell in row.find_elements(By.XPATH, "td")]
+            row_data.append(datatheo)
             rows_data.append(row_data)
             print(row_data)
     except Exception as e:
@@ -86,7 +89,7 @@ def scrape_page_next():
             next_button.click()
 
             # Pausar para garantir que a página foi carregada
-            time.sleep(2)
+            time.sleep(1)
 
             # Raspar a próxima página
             scrape_page()
@@ -122,7 +125,7 @@ def upload_to_s3(filename):
     if not uploader.load_env_variables():
         return
 
-    bucket_name = "mlet40-datalake"
+    bucket_name = "mlet40-data"
     object_name = f"raw/{filename}"  # Opcional, pode ser None
     uploader.upload_to_s3(filename, bucket_name, object_name)
 
